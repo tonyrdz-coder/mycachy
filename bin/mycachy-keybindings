@@ -1,0 +1,49 @@
+#!/bin/bash
+
+modmask_to_text() {
+  case "$1" in
+    0)  printf '' ;;
+    1)  printf 'SHIFT' ;;
+    4)  printf 'CTRL' ;;
+    8)  printf 'ALT' ;;
+    64) printf 'SUPER' ;;
+    65) printf 'SUPER SHIFT' ;;
+    68) printf 'SUPER CTRL' ;;
+    72) printf 'SUPER ALT' ;;
+    73) printf 'SUPER SHIFT ALT' ;;
+    76) printf 'SUPER CTRL ALT' ;;
+    *)  printf '%s' "$1" ;;
+  esac
+}
+
+bindings=$(hyprctl -j binds | jq -r '.[] | [
+  (.modmask | tostring),
+  (.key // ""),
+  (.description // ""),
+  (.dispatcher // ""),
+  (.arg // "")
+] | join("")' | while IFS=$'\x1f' read -r modmask key desc dispatcher arg; do
+  [[ -z "$key" ]] && continue
+
+  mod=$(modmask_to_text "$modmask")
+  combo="${mod:+$mod + }${key^^}"
+
+  if [[ -n "$desc" ]]; then
+    action="$desc"
+  else
+    action="${arg:-$dispatcher}"
+    action="${action#exec, }"
+    action="${action#exec,}"
+  fi
+
+  [[ -z "$action" ]] && continue
+
+  printf "%-35s → %s\n" "$combo" "$action"
+done | sort -u)
+
+[[ -z "$bindings" ]] && { echo "No bindings found" >&2; exit 1; }
+
+monitor_height=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .height')
+menu_height=$((monitor_height * 40 / 100))
+
+echo "$bindings" | walker --dmenu -p 'Keybindings' --width 800 --height "$menu_height" > /dev/null

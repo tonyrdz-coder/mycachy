@@ -25,6 +25,9 @@ for f in "$REPO_DIR/bin/"*; do
   [ -f "$f" ] && ln -sf "$f" "$HOME/.local/bin/$(basename "$f")"
 done
 
+echo "==> Installing Claude Code..."
+npm install -g @anthropic-ai/claude-code
+
 echo "==> Setting fish as default shell..."
 chsh -s /usr/bin/fish
 

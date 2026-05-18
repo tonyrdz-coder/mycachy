@@ -30,3 +30,6 @@ noto-fonts
 noto-fonts-emoji
 iwd
 git
+nodejs
+npm
+jq
