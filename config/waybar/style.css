@@ -1,0 +1,49 @@
+/* Catppuccin Mocha */
+* {
+  background-color: #1e1e2e;
+  color: #cdd6f4;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  font-family: 'JetBrainsMono Nerd Font';
+  font-size: 12px;
+}
+
+.modules-left  { margin-left: 8px; }
+.modules-right { margin-right: 8px; }
+
+#workspaces button {
+  all: initial;
+  color: #cdd6f4;
+  padding: 0 6px;
+  margin: 0 1.5px;
+  min-width: 9px;
+}
+
+#workspaces button.empty   { opacity: 0.4; }
+#workspaces button.active  { color: #cba6f7; }
+#workspaces button:hover   { color: #89b4fa; }
+
+#clock {
+  margin: 0 8px;
+}
+
+#bluetooth,
+#network,
+#pulseaudio,
+#cpu,
+#battery,
+#custom-nvidia,
+#custom-damx {
+  margin: 0 7px;
+}
+
+#battery.warning  { color: #f9e2af; }
+#battery.critical { color: #f38ba8; }
+
+tooltip {
+  background-color: #313244;
+  border: 1px solid #cba6f7;
+  border-radius: 4px;
+  padding: 4px;
+}
