@@ -25,7 +25,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 ----------------
 hl.on("hyprland.start", function()
     hl.exec_cmd("swaybg -i " .. os.getenv("HOME") .. "/.local/share/mycachy/wallpapers/mycachy-wallpaper.png -m fill")
-    hl.exec_cmd("swayosd-server")
+    hl.exec_cmd("swayosd-server --style " .. os.getenv("HOME") .. "/.config/swayosd/style.css")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("waybar")
     hl.exec_cmd("mako")
