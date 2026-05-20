@@ -8,13 +8,13 @@ hl.monitor({
     output   = "",
     mode     = "preferred",
     position = "auto",
-    scale    = 1,
+    scale    = 1.5,
 })
 
 ----------------
 -- ENV VARS
 ----------------
-hl.env("XCURSOR_SIZE",              "24")
+hl.env("XCURSOR_SIZE",              "36")
 hl.env("QT_QPA_PLATFORMTHEME",      "qt6ct")
 hl.env("LIBVA_DRIVER_NAME",         "nvidia")
 hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
@@ -30,6 +30,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hyprpolkitagent")
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
+    hl.exec_cmd("elephant")
+    hl.exec_cmd("walker --gapplication-service")
 end)
 
 ----------------
@@ -133,10 +135,11 @@ hl.bind(mod .. " + K",              hl.dsp.exec_cmd("mycachy-keybindings"))
 
 -- Window management
 hl.bind(mod .. " + Q",              hl.dsp.window.close())
+hl.bind(mod .. " + W",              hl.dsp.window.close())
 hl.bind(mod .. " + F",              hl.dsp.window.fullscreen())
 hl.bind(mod .. " + SHIFT + Space",  hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mod .. " + P",              hl.dsp.window.pseudo())
-hl.bind(mod .. " + ALT + J",        hl.dsp.layout("togglesplit"))
+hl.bind(mod .. " + CTRL + J",       hl.dsp.layout("togglesplit"))
 
 -- Focus
 hl.bind(mod .. " + H",     hl.dsp.focus({ direction = "left" }))
@@ -157,9 +160,10 @@ hl.bind(mod .. " + SHIFT + up",    hl.dsp.window.move({ direction = "up" }))
 hl.bind(mod .. " + SHIFT + down",  hl.dsp.window.move({ direction = "down" }))
 
 -- Resize windows
-hl.bind(mod .. " + ALT + H", hl.dsp.window.resize_by({ x = -50, y = 0  }), { repeating = true })
-hl.bind(mod .. " + ALT + L", hl.dsp.window.resize_by({ x =  50, y = 0  }), { repeating = true })
-hl.bind(mod .. " + ALT + J", hl.dsp.window.resize_by({ x =   0, y = 50 }), { repeating = true })
+hl.bind(mod .. " + ALT + H", hl.dsp.window.resize({ x = -50, y =   0 }), { repeating = true })
+hl.bind(mod .. " + ALT + L", hl.dsp.window.resize({ x =  50, y =   0 }), { repeating = true })
+hl.bind(mod .. " + ALT + K", hl.dsp.window.resize({ x =   0, y = -50 }), { repeating = true })
+hl.bind(mod .. " + ALT + J", hl.dsp.window.resize({ x =   0, y =  50 }), { repeating = true })
 
 -- Workspaces
 for i = 1, 5 do

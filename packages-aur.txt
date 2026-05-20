@@ -1,2 +1,5 @@
 bluetui
+elephant-bin
+elephant-desktopapplications-bin
+elephant-runner-bin
 impala
