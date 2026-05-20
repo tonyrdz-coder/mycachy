@@ -25,6 +25,7 @@ cliphist
 fish
 starship
 yazi
+neovim
 brightnessctl
 playerctl
 bluez
