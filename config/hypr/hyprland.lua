@@ -23,7 +23,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 -- AUTOSTART
 ----------------
 hl.on("hyprland.start", function()
-    hl.exec_cmd("hyprpaper")
+    hl.exec_cmd("swaybg -i " .. os.getenv("HOME") .. "/.local/share/mycachy/wallpapers/mycachy-wallpaper.png -m fill")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("waybar")
     hl.exec_cmd("mako")
@@ -127,6 +127,7 @@ hl.bind(mod .. " + SHIFT + W",      hl.dsp.exec_cmd("rfkill unblock wifi && foot
 
 -- Launcher / utils
 hl.bind(mod .. " + Space",          hl.dsp.exec_cmd("walker"))
+hl.bind(mod .. " + ALT + Space",    hl.dsp.exec_cmd("walker -m providerlist"))
 hl.bind(mod .. " + V",              hl.dsp.exec_cmd("cliphist list | walker --dmenu | cliphist decode | wl-copy"))
 hl.bind(mod .. " + SHIFT + S",      hl.dsp.exec_cmd("hyprshot -m region"))
 hl.bind("Print",                    hl.dsp.exec_cmd("hyprshot -m output"))

@@ -34,9 +34,29 @@
 #cpu,
 #battery,
 #custom-nvidia,
-#custom-damx {
+#custom-damx,
+#custom-weather,
+#custom-idle-indicator,
+#custom-notification-indicator {
   margin: 0 7px;
 }
+
+#custom-idle-indicator.active,
+#custom-notification-indicator.active {
+  color: #f38ba8;
+}
+
+#custom-expand-icon {
+  margin: 0 4px;
+  color: #6c7086;
+}
+
+#tray {
+  margin: 0 4px;
+}
+
+#tray > .passive { -gtk-icon-effect: dim; }
+#tray > .needs-attention { -gtk-icon-effect: highlight; }
 
 #battery.warning  { color: #f9e2af; }
 #battery.critical { color: #f38ba8; }

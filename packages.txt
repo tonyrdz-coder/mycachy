@@ -5,7 +5,7 @@ walker
 foot
 mako
 libnotify
-hyprpaper
+swaybg
 hyprlock
 hypridle
 hyprpolkitagent

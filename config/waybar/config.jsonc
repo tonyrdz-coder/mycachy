@@ -6,8 +6,9 @@
   "height": 26,
   "width": 0,
   "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["clock"],
+  "modules-center": ["clock", "custom/weather", "custom/idle-indicator", "custom/notification-indicator"],
   "modules-right": [
+    "group/tray-expander",
     "bluetooth",
     "network",
     "pulseaudio",
@@ -79,7 +80,7 @@
   },
 
   "bluetooth": {
-    "format": "",
+    "format": "󰂯",
     "format-off": "󰂲",
     "format-disabled": "󰂲",
     "format-connected": "󰂱",
@@ -99,6 +100,53 @@
       "headset": "",
       "default": ["", "", ""]
     }
+  },
+
+  "custom/weather": {
+    "exec": "waybar-weather",
+    "return-type": "json",
+    "interval": 60,
+    "tooltip": true
+  },
+
+  "custom/idle-indicator": {
+    "exec": "waybar-idle-indicator",
+    "return-type": "json",
+    "signal": 9,
+    "interval": 30,
+    "on-click": "mycachy-toggle-idle"
+  },
+
+  "custom/notification-indicator": {
+    "exec": "waybar-notification-indicator",
+    "return-type": "json",
+    "signal": 10,
+    "interval": "once",
+    "on-click": "mycachy-toggle-notification-silencing"
+  },
+
+  "group/tray-expander": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 600,
+      "children-class": "tray-group-item"
+    },
+    "modules": ["group/expand-icons", "tray"]
+  },
+
+  "group/expand-icons": {
+    "orientation": "inherit",
+    "modules": ["custom/expand-icon"]
+  },
+
+  "custom/expand-icon": {
+    "format": "",
+    "tooltip": false
+  },
+
+  "tray": {
+    "icon-size": 12,
+    "spacing": 17
   },
 
   "battery": {

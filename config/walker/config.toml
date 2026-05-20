@@ -1,6 +1,8 @@
 force_keyboard_focus = true
 selection_wrap = true
 hide_action_hints = true
+theme = "mycachy-default"
+additional_theme_location = "~/.config/walker/themes/"
 
 [placeholders]
 "default" = { input = " Search...", list = "No Results" }
