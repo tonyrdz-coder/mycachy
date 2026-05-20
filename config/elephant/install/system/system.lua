@@ -6,8 +6,8 @@ HideFromProviderlist = false
 
 function GetEntries()
   return {
-    { Text = "Toggle Idle Lock",       Icon = "security-high",      Actions = { activate = "mycachy-toggle-idle" } },
-    { Text = "Toggle Do Not Disturb",  Icon = "notification",       Actions = { activate = "mycachy-toggle-notification-silencing" } },
+    { Text = "Toggle Idle Lock",       Icon = "security-high",      Actions = { activate = os.getenv("HOME") .. "/.local/bin/mycachy-toggle-idle" } },
+    { Text = "Toggle Do Not Disturb",  Icon = "notification",       Actions = { activate = os.getenv("HOME") .. "/.local/bin/mycachy-toggle-notification-silencing" } },
     { Text = "Night Mode On",          Icon = "night-light",        Actions = { activate = "hyprsunset -t 3500" } },
     { Text = "Night Mode Off",         Icon = "display-brightness", Actions = { activate = "pkill hyprsunset" } },
     { Text = "Bluetooth Manager",      Icon = "bluetooth",          Actions = { activate = "foot --app-id floating -e bluetui" } },

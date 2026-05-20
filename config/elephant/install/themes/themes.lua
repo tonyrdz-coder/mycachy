@@ -25,7 +25,7 @@ function GetEntries()
     local marker = name == current_theme and "  ✓" or ""
     table.insert(entries, {
       Text    = label .. marker,
-      Actions = { activate = "mycachy-theme-set " .. name },
+      Actions = { activate = os.getenv("HOME") .. "/.local/bin/mycachy-theme-set " .. name },
     })
   end
   handle:close()
