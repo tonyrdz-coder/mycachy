@@ -24,6 +24,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 ----------------
 hl.on("hyprland.start", function()
     hl.exec_cmd("swaybg -i " .. os.getenv("HOME") .. "/.local/share/mycachy/wallpapers/mycachy-wallpaper.png -m fill")
+    hl.exec_cmd("swayosd-server")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("waybar")
     hl.exec_cmd("mako")
@@ -129,10 +130,11 @@ hl.bind(mod .. " + SHIFT + W",      hl.dsp.exec_cmd("rfkill unblock wifi && foot
 hl.bind(mod .. " + Space",          hl.dsp.exec_cmd("walker"))
 hl.bind(mod .. " + ALT + Space",    hl.dsp.exec_cmd("walker -m providerlist"))
 hl.bind(mod .. " + V",              hl.dsp.exec_cmd("cliphist list | walker --dmenu | cliphist decode | wl-copy"))
-hl.bind(mod .. " + SHIFT + S",      hl.dsp.exec_cmd("hyprshot -m region"))
-hl.bind("Print",                    hl.dsp.exec_cmd("hyprshot -m output"))
+hl.bind(mod .. " + SHIFT + S",      hl.dsp.exec_cmd("mycachy-screenshot"))
+hl.bind(mod .. " + ALT + SHIFT + S",hl.dsp.exec_cmd("mycachy-screenrecord"))
+hl.bind("Print",                    hl.dsp.exec_cmd("grim " .. os.getenv("HOME") .. "/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"))
+hl.bind(mod .. " + ALT + C",        hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind(mod .. " + Escape",         hl.dsp.exec_cmd("walker -m power"))
-hl.bind(mod .. " + K",              hl.dsp.exec_cmd("mycachy-keybindings"))
 
 -- Window management
 hl.bind(mod .. " + Q",              hl.dsp.window.close())
@@ -142,10 +144,11 @@ hl.bind(mod .. " + SHIFT + Space",  hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mod .. " + P",              hl.dsp.window.pseudo())
 hl.bind(mod .. " + CTRL + J",       hl.dsp.layout("togglesplit"))
 
--- Focus
+-- Focus (HJKL + arrows)
 hl.bind(mod .. " + H",     hl.dsp.focus({ direction = "left" }))
-hl.bind(mod .. " + L",     hl.dsp.focus({ direction = "right" }))
 hl.bind(mod .. " + J",     hl.dsp.focus({ direction = "down" }))
+hl.bind(mod .. " + K",     hl.dsp.focus({ direction = "up" }))
+hl.bind(mod .. " + L",     hl.dsp.focus({ direction = "right" }))
 hl.bind(mod .. " + left",  hl.dsp.focus({ direction = "left" }))
 hl.bind(mod .. " + right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mod .. " + up",    hl.dsp.focus({ direction = "up" }))
@@ -180,15 +183,15 @@ hl.bind(mod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(mod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
--- Volume
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),        { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),       { locked = true })
-hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),     { locked = true })
+-- Volume (with swayosd display)
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("swayosd-client --output-volume raise"),        { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("swayosd-client --output-volume lower"),        { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("swayosd-client --output-volume mute-toggle"),  { locked = true })
+hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("swayosd-client --input-volume mute-toggle"),   { locked = true })
 
--- Brightness
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl set 5%+"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"), { locked = true, repeating = true })
+-- Brightness (with swayosd display)
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("swayosd-client --brightness raise"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"), { locked = true, repeating = true })
 
 -- Media
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
@@ -218,3 +221,16 @@ hl.window_rule({
     size   = "900 600",
     center = true,
 })
+
+-- Webapps launched via mycachy-webapp (chromium --app=URL) open as tiled windows
+-- Add keybinds for your own webapps:
+-- hl.bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd("mycachy-webapp https://chatgpt.com"))
+-- hl.bind(mod .. " + SHIFT + E", hl.dsp.exec_cmd("mycachy-webapp https://gmail.com"))
+-- hl.bind(mod .. " + SHIFT + Y", hl.dsp.exec_cmd("mycachy-webapp https://youtube.com"))
+
+----------------
+-- THEME
+----------------
+local theme_file = os.getenv("HOME") .. "/.local/share/mycachy/current-theme/hyprland.lua"
+local tf = io.open(theme_file, "r")
+if tf then tf:close(); dofile(theme_file) end

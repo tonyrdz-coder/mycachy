@@ -1,0 +1,102 @@
+#!/bin/bash
+
+THEME_NAME="$1"
+THEMES_DIR="$HOME/.local/share/mycachy/themes"
+CURRENT_DIR="$HOME/.local/share/mycachy/current-theme"
+
+if [[ -z $THEME_NAME ]]; then
+  echo "Usage: mycachy-theme-set <theme-name>"
+  exit 1
+fi
+
+THEME_DIR="$THEMES_DIR/$THEME_NAME"
+if [[ ! -f "$THEME_DIR/colors.toml" ]]; then
+  echo "Theme '$THEME_NAME' not found in $THEMES_DIR"
+  exit 1
+fi
+
+mkdir -p "$CURRENT_DIR"
+
+get_color() {
+  awk -F'=' -v key="^$1 " '$0 ~ key {
+    gsub(/[ \t"#]/, "", $2); print $2; exit
+  }' "$THEME_DIR/colors.toml"
+}
+
+ACCENT=$(get_color accent)
+BG=$(get_color background)
+FG=$(get_color foreground)
+SEL_FG=$(get_color selection_foreground)
+SEL_BG=$(get_color selection_background)
+CURSOR=$(get_color cursor)
+
+C0=$(get_color color0);  C1=$(get_color color1);  C2=$(get_color color2);  C3=$(get_color color3)
+C4=$(get_color color4);  C5=$(get_color color5);  C6=$(get_color color6);  C7=$(get_color color7)
+C8=$(get_color color8);  C9=$(get_color color9);  C10=$(get_color color10); C11=$(get_color color11)
+C12=$(get_color color12); C13=$(get_color color13); C14=$(get_color color14); C15=$(get_color color15)
+
+# Foot colors
+cat > "$CURRENT_DIR/foot-colors.ini" << EOF
+[colors-dark]
+foreground=$FG
+background=$BG
+selection-foreground=${SEL_FG:-$BG}
+selection-background=${SEL_BG:-$ACCENT}
+cursor=$BG ${CURSOR:-$ACCENT}
+regular0=$C0
+regular1=$C1
+regular2=$C2
+regular3=$C3
+regular4=$C4
+regular5=$C5
+regular6=$C6
+regular7=$C7
+bright0=$C8
+bright1=$C9
+bright2=$C10
+bright3=$C11
+bright4=$C12
+bright5=$C13
+bright6=$C14
+bright7=$C15
+EOF
+
+# Hyprland border color (loaded on next hyprland reload)
+cat > "$CURRENT_DIR/hyprland.lua" << EOF
+hl.config({
+  general = {
+    col = {
+      active_border = { colors = { "rgba(${ACCENT}ff)", "rgba(${C4}ff)" }, angle = 45 },
+      inactive_border = "rgba(313244ff)",
+    },
+  },
+})
+EOF
+
+# Apply Hyprland border color live without requiring reload
+hyprctl eval "hl.config({ general = { col = { active_border = { colors = { 'rgba(${ACCENT}ff)', 'rgba(${C4}ff)' }, angle = 45 } } } })" 2>/dev/null
+
+# Update running foot terminals via OSC sequences
+foot_osc=""
+foot_osc+="\033]10;#${FG}\007"
+foot_osc+="\033]11;#${BG}\007"
+for i in 0 1 2 3 4 5 6 7; do
+  eval "c=\$C${i}"
+  foot_osc+="\033]4;${i};#${c}\007"
+done
+for i in 8 9 10 11 12 13 14 15; do
+  j=$((i - 8)); eval "c=\$C${i}"
+  foot_osc+="\033]4;${i};#${c}\007"
+done
+
+for foot_pid in $(pgrep -x foot); do
+  for child_pid in $(pgrep -P "$foot_pid"); do
+    tty=$(readlink "/proc/$child_pid/fd/1" 2>/dev/null)
+    [[ $tty == /dev/pts/* ]] && printf '%b' "$foot_osc" > "$tty"
+  done
+done
+
+# Store current theme name
+echo "$THEME_NAME" > "$CURRENT_DIR/name"
+
+notify-send "Theme: $THEME_NAME" "" -u low -t 2000

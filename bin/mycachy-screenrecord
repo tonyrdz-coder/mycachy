@@ -1,0 +1,22 @@
+#!/bin/bash
+
+OUTPUT_DIR="${XDG_VIDEOS_DIR:-$HOME/Videos}"
+[[ -d $OUTPUT_DIR ]] || mkdir -p "$OUTPUT_DIR"
+PIDFILE="/tmp/mycachy-screenrecord.pid"
+
+if [[ -f $PIDFILE ]]; then
+  kill -SIGINT "$(cat $PIDFILE)" 2>/dev/null
+  rm -f "$PIDFILE"
+  notify-send "Screen recording stopped" -u low -t 2000
+  pkill -RTMIN+8 waybar 2>/dev/null
+  exit 0
+fi
+
+SELECTION=$(slurp -d 2>/dev/null)
+[[ -z $SELECTION ]] && exit 0
+
+FILE="$OUTPUT_DIR/screenrecord-$(date +%Y-%m-%d_%H-%M-%S).mp4"
+wf-recorder -g "$SELECTION" -f "$FILE" &
+echo $! > "$PIDFILE"
+notify-send "Screen recording started" "Run again to stop" -u low -t 2000
+pkill -RTMIN+8 waybar 2>/dev/null

@@ -1,0 +1,2 @@
+#!/bin/bash
+ls "$HOME/.local/share/mycachy/themes/" 2>/dev/null

@@ -1,0 +1,10 @@
+#!/bin/bash
+# Launch a URL as a desktop app in Chromium app mode
+
+URL="$1"
+if [[ -z $URL ]]; then
+  echo "Usage: mycachy-webapp <url>"
+  exit 1
+fi
+
+exec chromium --app="$URL" "${@:2}"

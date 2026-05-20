@@ -2,6 +2,7 @@ hyprland
 xdg-desktop-portal-hyprland
 waybar
 walker
+swayosd
 foot
 mako
 libnotify
@@ -10,7 +11,11 @@ hyprlock
 hypridle
 hyprpolkitagent
 hyprshot
+hyprpicker
 hyprsunset
+satty
+chromium
+wf-recorder
 pipewire
 pipewire-alsa
 pipewire-pulse

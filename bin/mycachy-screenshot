@@ -1,0 +1,24 @@
+#!/bin/bash
+
+OUTPUT_DIR="${XDG_PICTURES_DIR:-$HOME/Pictures}"
+[[ -d $OUTPUT_DIR ]] || mkdir -p "$OUTPUT_DIR"
+
+pkill slurp && exit 0
+
+hyprpicker -r -z >/dev/null 2>&1 &
+PICKER_PID=$!
+sleep 0.1
+
+SELECTION=$(slurp 2>/dev/null)
+kill $PICKER_PID 2>/dev/null
+
+[[ -z $SELECTION ]] && exit 0
+
+FILE="$OUTPUT_DIR/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"
+grim -g "$SELECTION" "$FILE" || exit 1
+wl-copy < "$FILE"
+
+(
+  ACTION=$(notify-send "Screenshot saved" "Click to annotate" -t 8000 -i "$FILE" -A "default=annotate")
+  [[ $ACTION == "annotate" ]] && satty --filename "$FILE" --output-filename "$FILE" --save-after-copy --copy-command wl-copy
+) &
