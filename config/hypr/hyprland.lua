@@ -132,7 +132,7 @@ hl.bind(mod .. " + ALT + Space",    hl.dsp.exec_cmd("walker -m providerlist"))
 hl.bind(mod .. " + V",              hl.dsp.exec_cmd("cliphist list | walker --dmenu | cliphist decode | wl-copy"))
 hl.bind(mod .. " + SHIFT + S",      hl.dsp.exec_cmd("mycachy-screenshot"))
 hl.bind(mod .. " + ALT + SHIFT + S",hl.dsp.exec_cmd("mycachy-screenrecord"))
-hl.bind("Print",                    hl.dsp.exec_cmd("grim " .. os.getenv("HOME") .. "/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png"))
+hl.bind("Print",                    hl.dsp.exec_cmd("mycachy-screenshot"))
 hl.bind(mod .. " + ALT + C",        hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind(mod .. " + Escape",         hl.dsp.exec_cmd("walker -m power"))
 
