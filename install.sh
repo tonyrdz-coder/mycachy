@@ -18,6 +18,7 @@ for dir in "$REPO_DIR/config"/*/; do
   name=$(basename "$dir")
   ln -sf "$dir" "$HOME/.config/$name"
 done
+ln -sf "$REPO_DIR/config/starship.toml" "$HOME/.config/starship.toml"
 
 echo "==> Installing bin scripts..."
 mkdir -p "$HOME/.local/bin"
