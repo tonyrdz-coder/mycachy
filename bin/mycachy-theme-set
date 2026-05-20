@@ -29,13 +29,12 @@ FG=$(get_color foreground)
 SEL_FG=$(get_color selection_foreground)
 SEL_BG=$(get_color selection_background)
 CURSOR=$(get_color cursor)
-
 C0=$(get_color color0);  C1=$(get_color color1);  C2=$(get_color color2);  C3=$(get_color color3)
 C4=$(get_color color4);  C5=$(get_color color5);  C6=$(get_color color6);  C7=$(get_color color7)
 C8=$(get_color color8);  C9=$(get_color color9);  C10=$(get_color color10); C11=$(get_color color11)
 C12=$(get_color color12); C13=$(get_color color13); C14=$(get_color color14); C15=$(get_color color15)
 
-# Foot colors
+# ── Foot ────────────────────────────────────────────────────────────────────
 cat > "$CURRENT_DIR/foot-colors.ini" << EOF
 [colors-dark]
 foreground=$FG
@@ -61,34 +60,11 @@ bright6=$C14
 bright7=$C15
 EOF
 
-# Hyprland border color (loaded on next hyprland reload)
-cat > "$CURRENT_DIR/hyprland.lua" << EOF
-hl.config({
-  general = {
-    col = {
-      active_border = { colors = { "rgba(${ACCENT}ff)", "rgba(${C4}ff)" }, angle = 45 },
-      inactive_border = "rgba(313244ff)",
-    },
-  },
-})
-EOF
-
-# Apply Hyprland border color live without requiring reload
-hyprctl eval "hl.config({ general = { col = { active_border = { colors = { 'rgba(${ACCENT}ff)', 'rgba(${C4}ff)' }, angle = 45 } } } })" 2>/dev/null
-
 # Update running foot terminals via OSC sequences
-foot_osc=""
-foot_osc+="\033]10;#${FG}\007"
-foot_osc+="\033]11;#${BG}\007"
-for i in 0 1 2 3 4 5 6 7; do
-  eval "c=\$C${i}"
-  foot_osc+="\033]4;${i};#${c}\007"
+foot_osc="\033]10;#${FG}\007\033]11;#${BG}\007"
+for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+  eval "c=\$C${i}"; foot_osc+="\033]4;${i};#${c}\007"
 done
-for i in 8 9 10 11 12 13 14 15; do
-  j=$((i - 8)); eval "c=\$C${i}"
-  foot_osc+="\033]4;${i};#${c}\007"
-done
-
 for foot_pid in $(pgrep -x foot); do
   for child_pid in $(pgrep -P "$foot_pid"); do
     tty=$(readlink "/proc/$child_pid/fd/1" 2>/dev/null)
@@ -96,7 +72,99 @@ for foot_pid in $(pgrep -x foot); do
   done
 done
 
-# Store current theme name
-echo "$THEME_NAME" > "$CURRENT_DIR/name"
+# ── Hyprland ─────────────────────────────────────────────────────────────────
+cat > "$CURRENT_DIR/hyprland.lua" << EOF
+hl.config({
+  general = {
+    col = {
+      active_border = { colors = { "rgba(${ACCENT}ff)", "rgba(${C4}ff)" }, angle = 45 },
+      inactive_border = "rgba(${C0}ff)",
+    },
+  },
+})
+EOF
+hyprctl eval "hl.config({ general = { col = { active_border = { colors = { 'rgba(${ACCENT}ff)', 'rgba(${C4}ff)' }, angle = 45 }, inactive_border = 'rgba(${C0}ff)' } } })" 2>/dev/null
 
+# ── Waybar ───────────────────────────────────────────────────────────────────
+cat > "$CURRENT_DIR/waybar.css" << EOF
+@define-color bg       #${BG};
+@define-color fg       #${FG};
+@define-color accent   #${ACCENT};
+@define-color surface  #${C0};
+@define-color overlay  #${C8};
+@define-color red      #${C1};
+@define-color yellow   #${C3};
+@define-color purple   #${C5};
+@define-color muted    #${C7};
+EOF
+pkill -SIGUSR2 waybar 2>/dev/null
+
+# ── Walker ───────────────────────────────────────────────────────────────────
+WALKER_THEME_DIR="$HOME/.config/walker/themes/mycachy-default"
+if [[ -f "$WALKER_THEME_DIR/style.css" ]]; then
+  sed -i \
+    "s/@define-color selected-text #[0-9a-fA-F]*;/@define-color selected-text #${ACCENT};/" \
+    "$WALKER_THEME_DIR/style.css"
+  sed -i \
+    "s/@define-color text #[0-9a-fA-F]*;/@define-color text #${FG};/" \
+    "$WALKER_THEME_DIR/style.css"
+  sed -i \
+    "s/@define-color base #[0-9a-fA-F]*;/@define-color base #${BG};/" \
+    "$WALKER_THEME_DIR/style.css"
+  sed -i \
+    "s/@define-color border #[0-9a-fA-F]*;/@define-color border #${ACCENT};/" \
+    "$WALKER_THEME_DIR/style.css"
+  sed -i \
+    "s/@define-color foreground #[0-9a-fA-F]*;/@define-color foreground #${FG};/" \
+    "$WALKER_THEME_DIR/style.css"
+  sed -i \
+    "s/@define-color background #[0-9a-fA-F]*;/@define-color background #${BG};/" \
+    "$WALKER_THEME_DIR/style.css"
+fi
+
+# ── Mako ─────────────────────────────────────────────────────────────────────
+MAKO_CFG="$HOME/.config/mako/config"
+if [[ -f "$MAKO_CFG" ]]; then
+  sed -i "s/^text-color=.*/text-color=#${FG}/"             "$MAKO_CFG"
+  sed -i "s/^border-color=.*/border-color=#${ACCENT}/"     "$MAKO_CFG"
+  sed -i "s/^background-color=.*/background-color=#${BG}/" "$MAKO_CFG"
+  sed -i "/^\[urgency=critical\]/,/^\[/ s/^border-color=.*/border-color=#${C1}/" "$MAKO_CFG"
+  makoctl reload 2>/dev/null
+fi
+
+# ── swayosd ───────────────────────────────────────────────────────────────────
+cat > "$CURRENT_DIR/swayosd.css" << EOF
+window#osd {
+  border-radius: 12px;
+  border: 2px solid #${C0};
+  background-color: rgba($(printf '%d,%d,%d' 0x${BG:0:2} 0x${BG:2:2} 0x${BG:4:2}), 0.92);
+}
+window#osd #container { margin: 14px 20px; }
+window#osd image, window#osd label {
+  color: #${FG};
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 11pt;
+}
+window#osd progressbar, window#osd segmentedprogress {
+  min-height: 6px; border-radius: 999px; background: transparent; border: none;
+}
+window#osd trough, window#osd segment {
+  min-height: inherit; border-radius: inherit; border: none;
+  background: rgba($(printf '%d,%d,%d' 0x${FG:0:2} 0x${FG:2:2} 0x${FG:4:2}), 0.15);
+}
+window#osd progress, window#osd segment.active {
+  min-height: inherit; border-radius: inherit; border: none;
+  background: #${ACCENT};
+}
+window#osd progressbar:disabled, window#osd image:disabled { opacity: 0.5; }
+window#osd segment { margin-left: 8px; }
+window#osd segment:first-child { margin-left: 0; }
+EOF
+pkill swayosd-server 2>/dev/null
+sleep 0.2
+swayosd-server --style "$CURRENT_DIR/swayosd.css" &>/dev/null &
+disown
+
+# ── Store & notify ────────────────────────────────────────────────────────────
+echo "$THEME_NAME" > "$CURRENT_DIR/name"
 notify-send "Theme: $THEME_NAME" "" -u low -t 2000
