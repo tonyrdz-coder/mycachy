@@ -8,7 +8,7 @@ hl.monitor({
     output   = "",
     mode     = "preferred",
     position = "auto",
-    scale    = 1.5,
+    scale    = 1.6,
 })
 
 ----------------
@@ -122,7 +122,7 @@ local mod = "SUPER"
 -- Applications
 hl.bind(mod .. " + Return",         hl.dsp.exec_cmd("foot"))
 hl.bind(mod .. " + SHIFT + Return", hl.dsp.exec_cmd("firefox"))
-hl.bind(mod .. " + SHIFT + F",      hl.dsp.exec_cmd("foot -e yazi"))
+hl.bind(mod .. " + SHIFT + F",      hl.dsp.exec_cmd("foot -e /usr/bin/yazi"))
 hl.bind(mod .. " + SHIFT + N",      hl.dsp.exec_cmd("foot -e nvim"))
 hl.bind(mod .. " + SHIFT + T",      hl.dsp.exec_cmd("rfkill unblock bluetooth && foot --app-id floating -e bluetui"))
 hl.bind(mod .. " + SHIFT + W",      hl.dsp.exec_cmd("rfkill unblock wifi && foot --app-id floating -e sudo impala"))
