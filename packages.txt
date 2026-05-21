@@ -40,3 +40,4 @@ git
 nodejs
 npm
 jq
+gum
