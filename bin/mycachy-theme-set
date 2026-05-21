@@ -34,43 +34,40 @@ C4=$(get_color color4);  C5=$(get_color color5);  C6=$(get_color color6);  C7=$(
 C8=$(get_color color8);  C9=$(get_color color9);  C10=$(get_color color10); C11=$(get_color color11)
 C12=$(get_color color12); C13=$(get_color color13); C14=$(get_color color14); C15=$(get_color color15)
 
-# ── Foot ────────────────────────────────────────────────────────────────────
-cat > "$CURRENT_DIR/foot-colors.ini" << EOF
-[colors-dark]
-foreground=$FG
-background=$BG
-selection-foreground=${SEL_FG:-$BG}
-selection-background=${SEL_BG:-$ACCENT}
-cursor=$BG ${CURSOR:-$ACCENT}
-regular0=$C0
-regular1=$C1
-regular2=$C2
-regular3=$C3
-regular4=$C4
-regular5=$C5
-regular6=$C6
-regular7=$C7
-bright0=$C8
-bright1=$C9
-bright2=$C10
-bright3=$C11
-bright4=$C12
-bright5=$C13
-bright6=$C14
-bright7=$C15
-EOF
+# ── Alacritty ───────────────────────────────────────────────────────────────
+cat > "$CURRENT_DIR/alacritty.toml" << EOF
+[colors.primary]
+background = "#${BG}"
+foreground = "#${FG}"
 
-# Update running foot terminals via OSC sequences
-foot_osc="\033]10;#${FG}\007\033]11;#${BG}\007"
-for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
-  eval "c=\$C${i}"; foot_osc+="\033]4;${i};#${c}\007"
-done
-for foot_pid in $(pgrep -x foot); do
-  for child_pid in $(pgrep -P "$foot_pid"); do
-    tty=$(readlink "/proc/$child_pid/fd/1" 2>/dev/null)
-    [[ $tty == /dev/pts/* ]] && printf '%b' "$foot_osc" > "$tty"
-  done
-done
+[colors.cursor]
+text   = "#${BG}"
+cursor = "#${CURSOR:-$ACCENT}"
+
+[colors.selection]
+text       = "#${SEL_FG:-$BG}"
+background = "#${SEL_BG:-$ACCENT}"
+
+[colors.normal]
+black   = "#${C0}"
+red     = "#${C1}"
+green   = "#${C2}"
+yellow  = "#${C3}"
+blue    = "#${C4}"
+magenta = "#${C5}"
+cyan    = "#${C6}"
+white   = "#${C7}"
+
+[colors.bright]
+black   = "#${C8}"
+red     = "#${C9}"
+green   = "#${C10}"
+yellow  = "#${C11}"
+blue    = "#${C12}"
+magenta = "#${C13}"
+cyan    = "#${C14}"
+white   = "#${C15}"
+EOF
 
 # ── Hyprland ─────────────────────────────────────────────────────────────────
 cat > "$CURRENT_DIR/hyprland.lua" << EOF
