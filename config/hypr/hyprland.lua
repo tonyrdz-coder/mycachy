@@ -191,8 +191,8 @@ hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("swayosd-client --output-volume 
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("swayosd-client --input-volume mute-toggle"),  { locked = true, description = "Mic mute" })
 
 -- Brightness (with swayosd display)
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("swayosd-client --brightness raise"), { locked = true, repeating = true, description = "Brightness up" })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"), { locked = true, repeating = true, description = "Brightness down" })
+hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("swayosd-client --device intel_backlight --brightness raise"), { locked = true, repeating = true, description = "Brightness up" })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --device intel_backlight --brightness lower"), { locked = true, repeating = true, description = "Brightness down" })
 
 -- Media
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true, description = "Play/pause" })
