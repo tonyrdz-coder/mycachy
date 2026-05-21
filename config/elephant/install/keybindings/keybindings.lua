@@ -2,7 +2,7 @@ Name = "keybindings"
 NamePretty = "Keybindings"
 Icon = "input-keyboard"
 Cache = false
-HideFromProviderlist = false
+HideFromProviderlist = true
 FixedOrder = true
 
 local MODMASK = {
