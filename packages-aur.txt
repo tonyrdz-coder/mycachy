@@ -5,3 +5,5 @@ elephant-runner-bin
 elephant-menus-bin
 elephant-providerlist-bin
 impala
+yaru-icon-theme
+hyprmod

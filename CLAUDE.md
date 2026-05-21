@@ -16,7 +16,7 @@ A self-contained dotfiles repo. `install.sh` installs all packages, enables serv
 
 ## Stack
 
-Hyprland, Waybar, Walker, Foot (terminal), Mako (notifications), hyprpaper, hyprlock, hypridle, hyprpolkitagent, PipeWire, wl-clipboard + cliphist, hyprshot, hyprsunset, Fish + Starship, Yazi, bluetui (Bluetooth TUI), impala (wifi TUI). Uses **iwd** (not NetworkManager) for wifi.
+Hyprland, Waybar, Walker, Alacritty (terminal), Mako (notifications), hyprpaper, hyprlock, hypridle, hyprpolkitagent, PipeWire, wl-clipboard + cliphist, hyprshot, hyprsunset, Fish + Starship, Yazi, bluetui (Bluetooth TUI), impala (wifi TUI). Uses **iwd** (not NetworkManager) for wifi.
 
 ## Repo structure
 
@@ -76,7 +76,7 @@ Note: keybinds may be captured by the outer session. This is expected — click 
 
 | Keybind | Action |
 |---|---|
-| SUPER+Return | Foot terminal |
+| SUPER+Return | Alacritty terminal |
 | SUPER+SHIFT+Return | Firefox |
 | SUPER+Space | Walker launcher |
 | SUPER+K | Keybindings viewer |
