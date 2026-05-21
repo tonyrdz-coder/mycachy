@@ -1,7 +1,6 @@
 bluetui
 elephant-bin
 elephant-desktopapplications-bin
-elephant-runner-bin
 elephant-menus-bin
 elephant-providerlist-bin
 impala
