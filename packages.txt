@@ -3,7 +3,7 @@ xdg-desktop-portal-hyprland
 waybar
 walker
 swayosd
-foot
+alacritty
 mako
 libnotify
 swaybg
@@ -26,6 +26,7 @@ fish
 starship
 yazi
 neovim
+tmux
 brightnessctl
 playerctl
 bluez

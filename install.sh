@@ -11,7 +11,7 @@ paru -S --needed - < "$REPO_DIR/packages-aur.txt"
 
 echo "==> Enabling services..."
 sudo systemctl enable --now bluetooth iwd
-systemctl --user enable --now pipewire wireplumber swayosd-libinput-backend
+systemctl --user enable --now pipewire wireplumber swayosd-libinput-backend hyprpolkitagent
 
 echo "==> Linking configs..."
 for dir in "$REPO_DIR/config"/*/; do
@@ -67,6 +67,7 @@ done
 
 echo "==> Applying default theme..."
 "$HOME/.local/bin/mycachy-theme-set" catppuccin 2>/dev/null || true
+gsettings set org.gnome.desktop.interface icon-theme "Yaru-blue"
 
 echo "==> Installing Claude Code..."
 npm install -g @anthropic-ai/claude-code
