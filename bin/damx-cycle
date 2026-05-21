@@ -1,0 +1,44 @@
+#!/bin/bash
+# Cycles through DAMX thermal profiles in order.
+# Requires DAMX daemon running: sudo systemctl start damx-daemon
+
+current=$(python3 -c "
+import socket, json, sys
+try:
+    s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    s.settimeout(2)
+    s.connect('/var/run/DAMX.sock')
+    s.send(json.dumps({'command': 'get_all_settings'}).encode())
+    data = s.recv(4096)
+    s.close()
+    print(json.loads(data)['data']['thermal_profile']['current'])
+except:
+    sys.exit(1)
+" 2>/dev/null) || exit 1
+
+profiles=("low-power" "quiet" "balanced" "balanced-performance" "performance")
+current_idx=0
+for i in "${!profiles[@]}"; do
+    [[ "${profiles[$i]}" == "$current" ]] && current_idx=$i && break
+done
+next="${profiles[$(( (current_idx + 1) % ${#profiles[@]} ))]}"
+
+python3 -c "
+import socket, json
+s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+s.settimeout(5)
+s.connect('/var/run/DAMX.sock')
+s.send(json.dumps({'command': 'set_thermal_profile', 'params': {'profile': '$next'}}).encode())
+s.recv(4096)
+s.close()
+" 2>/dev/null
+
+declare -A labels=(
+  ["low-power"]="Low Power"
+  ["quiet"]="Quiet"
+  ["balanced"]="Balanced"
+  ["balanced-performance"]="Performance"
+  ["performance"]="Turbo"
+)
+pkill -RTMIN+11 waybar 2>/dev/null
+notify-send -u low "Thermal profile" "Switched to ${labels[$next]}"
