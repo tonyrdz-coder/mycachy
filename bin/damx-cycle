@@ -16,22 +16,39 @@ except:
     sys.exit(1)
 " 2>/dev/null) || exit 1
 
-profiles=("low-power" "quiet" "balanced" "balanced-performance" "performance")
+# Only low-power and balanced work on BIOS V1.26 — others return ENOTSUP
+profiles=("low-power" "balanced")
 current_idx=0
 for i in "${!profiles[@]}"; do
     [[ "${profiles[$i]}" == "$current" ]] && current_idx=$i && break
 done
 next="${profiles[$(( (current_idx + 1) % ${#profiles[@]} ))]}"
 
-python3 -c "
-import socket, json
+# Try each profile from next onward until one sticks
+for attempt in "${profiles[@]}"; do
+  idx=$(( (current_idx + 1) % ${#profiles[@]} ))
+  next="${profiles[$idx]}"
+  current_idx=$idx
+
+  actual=$(python3 -c "
+import socket, json, sys
 s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 s.settimeout(5)
 s.connect('/var/run/DAMX.sock')
 s.send(json.dumps({'command': 'set_thermal_profile', 'params': {'profile': '$next'}}).encode())
 s.recv(4096)
 s.close()
-" 2>/dev/null
+s2 = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+s2.settimeout(2)
+s2.connect('/var/run/DAMX.sock')
+s2.send(json.dumps({'command': 'get_all_settings'}).encode())
+data = json.loads(s2.recv(4096))
+s2.close()
+print(data['data']['thermal_profile']['current'])
+" 2>/dev/null)
+
+  [[ "$actual" == "$next" ]] && break
+done
 
 declare -A labels=(
   ["low-power"]="Low Power"

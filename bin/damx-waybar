@@ -12,7 +12,9 @@ try:
     raw = s.recv(4096)
     s.close()
     d = json.loads(raw)['data']
-    print(d['thermal_profile']['current'])
+    p = d['thermal_profile']['current']
+    if not p: p = 'low-power'
+    print(p)
 except:
     sys.exit(1)
 " 2>/dev/null) || exit 0
@@ -24,11 +26,11 @@ cpu_fan=$(cat "$hwmon_path/fan1_input" 2>/dev/null || echo 0)
 gpu_fan=$(cat "$hwmon_path/fan2_input" 2>/dev/null || echo 0)
 
 case "$profile" in
-  "low-power")            icon=""; label="Low Power" ;;
-  "quiet")                icon=""; label="Quiet" ;;
-  "balanced")             icon=""; label="Balanced" ;;
-  "balanced-performance") icon=""; label="Performance" ;;
-  "performance")          icon=""; label="Turbo" ;;
+  "low-power")            icon="🌱"; label="Low Power" ;;
+  "quiet")                icon="🌙"; label="Quiet" ;;
+  "balanced")             icon="⚖️";  label="Balanced" ;;
+  "balanced-performance") icon="⚡";  label="Performance" ;;
+  "performance")          icon="🔥"; label="Turbo" ;;
   *)                      exit 0 ;;
 esac
 
