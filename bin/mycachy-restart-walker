@@ -1,0 +1,9 @@
+#!/bin/bash
+
+pkill elephant
+pkill walker
+
+sleep 0.3
+
+elephant &disown
+walker --gapplication-service &disown
