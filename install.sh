@@ -68,6 +68,7 @@ done
 echo "==> Applying default theme..."
 "$HOME/.local/bin/mycachy-theme-set" catppuccin 2>/dev/null || true
 gsettings set org.gnome.desktop.interface icon-theme "Yaru-blue"
+gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
 
 echo "==> Installing Claude Code..."
 npm install -g @anthropic-ai/claude-code

@@ -3,4 +3,3 @@ config/hypr/hyprland-gui.lua
 
 # machine-generated state, not portable
 config/fish/fish_variables
-config/gtk-4.0/
