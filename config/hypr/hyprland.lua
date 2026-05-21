@@ -129,7 +129,7 @@ hl.bind(mod .. " + SHIFT + W",      hl.dsp.exec_cmd("rfkill unblock wifi && alac
 
 -- Launcher / utils
 hl.bind(mod .. " + Space",          hl.dsp.exec_cmd("walker"),                                                            { description = "Launch apps" })
-hl.bind(mod .. " + ALT + Space",    hl.dsp.exec_cmd("walker -m providerlist"),                                            { description = "App providers" })
+hl.bind(mod .. " + ALT + Space",    hl.dsp.exec_cmd("walker -m providerlist"),                                            { description = "Quick menu" })
 hl.bind(mod .. " + K",              hl.dsp.exec_cmd("mycachy-keybindings"),                                               { description = "Keybindings" })
 hl.bind(mod .. " + V",              hl.dsp.exec_cmd("cliphist list | walker --dmenu | cliphist decode | wl-copy"),        { description = "Clipboard" })
 hl.bind(mod .. " + SHIFT + S",      hl.dsp.exec_cmd("mycachy-screenshot"),                                                { description = "Screenshot" })

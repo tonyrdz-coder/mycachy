@@ -6,6 +6,7 @@ HideFromProviderlist = false
 
 function GetEntries()
   return {
+    { Text = "Hyprland Settings",      Icon = "preferences-system", Actions = { activate = "hyprmod" } },
     { Text = "Keybindings",            Icon = "input-keyboard",     Actions = { activate = os.getenv("HOME") .. "/.local/bin/mycachy-keybindings" } },
     { Text = "Toggle Idle Lock",       Icon = "security-high",      Actions = { activate = os.getenv("HOME") .. "/.local/bin/mycachy-toggle-idle" } },
     { Text = "Toggle Do Not Disturb",  Icon = "notification",       Actions = { activate = os.getenv("HOME") .. "/.local/bin/mycachy-toggle-notification-silencing" } },
