@@ -92,7 +92,7 @@ Brightness OSD uses `swayosd-client --device intel_backlight` explicitly (hybrid
 
 ## Installing on a fresh CachyOS system
 
-Fresh CachyOS uses NetworkManager by default. Disable it first or iwd won't work:
+If the system came with NetworkManager (most CachyOS installs do), disable it — it conflicts with iwd:
 
 ```bash
 sudo systemctl disable --now NetworkManager
@@ -107,6 +107,29 @@ cd mycachy
 ```
 
 Log out and back in — Hyprland will start automatically.
+
+## Dual-boot with Windows
+
+Install Windows first, then CachyOS. CachyOS uses GRUB by default.
+
+After both OSes are installed, set up GRUB to detect Windows and fix the clock drift issue (Windows uses local time, Linux uses UTC):
+
+```bash
+# Enable os-prober so GRUB finds the Windows entry
+sudo sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
+# or add manually if line is missing:
+echo 'GRUB_DISABLE_OS_PROBER=false' | sudo tee -a /etc/default/grub
+
+# Regenerate GRUB config (will find Windows via os-prober)
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# Fix clock drift — make Linux use local time like Windows
+timedatectl set-local-rtc 1 --adjust-system-clock
+```
+
+`os-prober` and `ntfs-3g` are in `packages.txt` so they're installed by `install.sh`. Run the GRUB steps after install.
+
+If Windows doesn't appear in GRUB after `grub-mkconfig`, make sure the Windows EFI partition is mounted (usually at `/boot/efi` or discoverable via `lsblk`).
 
 ## Testing without installing (nested Hyprland)
 
@@ -145,4 +168,4 @@ Note: keybinds may be captured by the outer session. This is expected — click 
 
 ## Hardware context
 
-Tony's machine: Acer Predator PHN16S-71, Intel + NVIDIA hybrid GPU, CachyOS. Scale 1.6 for HiDPI. Main daily driver runs Omarchy. mycachy is on a second partition.
+Tony's machine: Acer Predator PHN16S-71, Intel + NVIDIA hybrid GPU, CachyOS. Scale 1.6 for HiDPI. Dual-boot: Windows + mycachy on separate partitions.

@@ -8,7 +8,7 @@
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock", "custom/weather", "custom/idle-indicator", "custom/notification-indicator"],
   "modules-right": [
-    "group/tray-expander",
+    "tray",
     "bluetooth",
     "network",
     "pulseaudio",
@@ -123,25 +123,6 @@
     "signal": 10,
     "interval": "once",
     "on-click": "mycachy-toggle-notification-silencing"
-  },
-
-  "group/tray-expander": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 600,
-      "children-class": "tray-group-item"
-    },
-    "modules": ["group/expand-icons", "tray"]
-  },
-
-  "group/expand-icons": {
-    "orientation": "inherit",
-    "modules": ["custom/expand-icon"]
-  },
-
-  "custom/expand-icon": {
-    "format": "",
-    "tooltip": false
   },
 
   "tray": {

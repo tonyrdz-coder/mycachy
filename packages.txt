@@ -31,7 +31,8 @@ brightnessctl
 playerctl
 bluez
 bluez-utils
-networkmanager
+os-prober
+ntfs-3g
 ttf-jetbrains-mono-nerd
 noto-fonts
 noto-fonts-emoji

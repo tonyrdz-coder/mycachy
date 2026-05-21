@@ -47,11 +47,6 @@
   color: @red;
 }
 
-#custom-expand-icon {
-  margin: 0 4px;
-  color: @muted;
-}
-
 #tray {
   margin: 0 4px;
 }
